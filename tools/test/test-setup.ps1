@@ -69,6 +69,7 @@ if ($Package) {
 
     Write-Host "Installing package: $Package"
     try {
+        $installed = $false
         if ($AllowUnsigned)
         {
             # Try to add with -AllowUnsigned first (supported in newer PowerShell)
@@ -89,7 +90,7 @@ if ($Package) {
                         $certPath = Join-Path $env:TEMP "wsl-package-cert.cer"
                         $cert | Export-Certificate -FilePath $certPath | Out-Null
                         try {
-                            Import-Certificate -FilePath $certPath -CertStoreLocation Cert:\LocalMachine\Root | Out-Null
+                            Import-Certificate -FilePath $certPath -CertStoreLocation Cert:\CurrentUser\Root | Out-Null
                         }
                         finally {
                             Remove-Item -Path $certPath -ErrorAction SilentlyContinue
