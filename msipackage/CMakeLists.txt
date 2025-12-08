@@ -1,4 +1,14 @@
 set(BIN ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE})
+
+# For pipeline builds, use PACKAGE_INPUT_DIR if specified (contains signed binaries)
+# For local builds, use bin directory
+if(DEFINED PACKAGE_INPUT_DIR)
+    message(STATUS "Using signed binaries from ${PACKAGE_INPUT_DIR} for MSI packaging")
+else()
+    set(PACKAGE_INPUT_DIR ${BIN})
+    message(STATUS "Using binaries from ${BIN} for MSI packaging")
+endif()
+
 set(OUTPUT_PACKAGE ${BIN}/wsl.msi)
 set(PACKAGE_WIX_IN ${CMAKE_CURRENT_LIST_DIR}/package.wix.in)
 set(PACKAGE_WIX ${BIN}/package.wix)
@@ -11,7 +21,7 @@ endif()
 
 set(BINARIES_DEPENDENCIES)
 foreach(binary ${BINARIES})
-    list(APPEND BINARIES_DEPENDENCIES "${BIN}/${binary}")
+    list(APPEND BINARIES_DEPENDENCIES "${PACKAGE_INPUT_DIR}/${binary}")
 endforeach()
 
 if (${WSL_BUILD_THIN_PACKAGE})
