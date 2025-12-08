@@ -23,10 +23,10 @@ parameters:
   - name: targets
     type: object
     default:
-      - target: "wsl;libwsl;wslg;wslservice;wslhost;wslrelay;wslinstaller;wslinstall;initramfs;wslserviceproxystub;wslsettings;wslinstallerproxystub;testplugin"
-        pattern: "wsl.exe,libwsl.dll,wslg.exe,wslservice.exe,wslhost.exe,wslrelay.exe,wslinstaller.exe,wslinstall.dll,wslserviceproxystub.dll,wslsettings.dll,wslsettings.exe,wslinstallerproxystub.dll,wsldevicehost.dll,WSLDVCPlugin.dll,testplugin.dll,wsldeps.dll"
-      - target: "msixgluepackage"
-        pattern: "gluepackage.msix"
+      - target: "wsl;libwsl;wslg;wslservice;wslhost;wslrelay;wslinstaller;wslinstall;initramfs;wslserviceproxystub;wslinstallerproxystub;testplugin"
+        pattern: "wsl.exe,libwsl.dll,wslg.exe,wslservice.exe,wslhost.exe,wslrelay.exe,wslinstaller.exe,wslinstall.dll,wslserviceproxystub.dll,wslinstallerproxystub.dll,wsldevicehost.dll,WSLDVCPlugin.dll,testplugin.dll,wsldeps.dll"
+      - target: "msixgluepackage;wslsettings"
+        pattern: "gluepackage.msix;wslsettings.exe;wslsettings.dll"
       - target: "msipackage"
         pattern: "wsl.msi"
 
@@ -223,21 +223,6 @@ stages:
                                         "ToolVersion" : "1.0"
                                     }
                               ]
-
-                  # Replace the intermediate wslsettings binaries file with the signed versions so that any future steps building wslsettings will use the signed versions
-                  - task: PowerShell@2
-                    displayName: 'Replace wslsettings binaries in intermediate folder with signed versions'
-                    condition: and(succeeded(), eq('${{ parameters.isRelease }}', true))
-                    inputs:
-                      targetType: inline
-                      script: |
-                        $arch = '${{ platform }}'
-                        $wslsettingsbinpath = "bin\$arch\release\wslsettings"
-                        $wslsettingsobjpath = "src\windows\wslsettings\obj\$arch\release"
-                        # Update the timestamp of wslsettings.exe so that it doesn't get rebuilt
-                        (Get-Item $wslsettingsbinpath\wslsettings.exe).LastWriteTime = Get-Date
-                        Copy-Item $wslsettingsbinpath\wslsettings.dll $wslsettingsobjpath\wslsettings.dll -Force
-                        Copy-Item $wslsettingsbinpath\wslsettings.exe $wslsettingsobjpath\apphost.exe -Force
 
               - script: cmake --build . --config Release -- -m
                 displayName: "Build installer msix and tests (${{ platform }})"
