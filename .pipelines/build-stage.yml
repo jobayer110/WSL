@@ -236,7 +236,7 @@ stages:
                               $inputDir = "bin\$arch\Release"
                               $outputDir = "$(packageStagingDir)\$arch"
                               New-Item -ItemType Directory -Path "$outputDir\wslsettings" -Force
-                              foreach ($file in $pattern.Split(';')) {
+                              foreach ($file in $pattern.Split(',')) {
                                   $sourcePath = Join-Path $inputDir $file
                                   if (Test-Path $sourcePath) {
                                       $destPath = Join-Path $outputDir $file
