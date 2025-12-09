@@ -26,7 +26,7 @@ parameters:
       - target: "wsl;libwsl;wslg;wslservice;wslhost;wslrelay;wslinstaller;wslinstall;initramfs;wslserviceproxystub;wslinstallerproxystub;testplugin"
         pattern: "wsl.exe,libwsl.dll,wslg.exe,wslservice.exe,wslhost.exe,wslrelay.exe,wslinstaller.exe,wslinstall.dll,wslserviceproxystub.dll,wslinstallerproxystub.dll,wsldevicehost.dll,WSLDVCPlugin.dll,testplugin.dll,wsldeps.dll"
       - target: "msixgluepackage;wslsettings"
-        pattern: "gluepackage.msix;wslsettings.exe;wslsettings.dll"
+        pattern: "gluepackage.msix,wslsettings.exe,wslsettings.dll"
       - target: "msipackage"
         pattern: "wsl.msi"
 
