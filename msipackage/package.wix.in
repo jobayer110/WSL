@@ -289,7 +289,7 @@
 
 
         <?if "${WSL_BUILD_WSL_SETTINGS}" = "true" ?>
-            <ComponentGroup Id="wslsettings" Directory="WSLSETTINGS" Source="${PACKAGE_INPUT_DIR}/wslsettings">
+            <ComponentGroup Id="wslsettings" Directory="WSLSETTINGS" Source="${BIN}/wslsettings">
                 <Component Id="wslsettingsnonserver" Guid="AB166073-8855-492B-95C8-C6E5939B66A5" Bitness="always64" DisableRegistryReflection="yes" UninstallWhenSuperseded="yes" Condition="MsiNTProductType = 1">
                     <RemoveFile Id="CleanUpWSLSettingsShortCutNonServer" Directory="ProgramMenuFolder" Name="WSLSettings" On="uninstall"/>
                     <File Id="wslsettings.exe_nonserver" Source="${PACKAGE_INPUT_DIR}/wslsettings/wslsettings.exe" KeyPath="yes" ShortName="kyk8fs6a.exe">
@@ -297,6 +297,7 @@
                             <ShortcutProperty Key="System.AppUserModel.IsSystemComponent" Value="true"/>
                         </Shortcut>
                     </File>
+                    <File Id="wslsettings.dll" Source="${PACKAGE_INPUT_DIR}/wslsettings/wslsettings.dll"/>
                     <!-- Protocol registration -->
                     <RegistryKey Root="HKLM" Key="Software">
                         <RegistryKey Key="Classes">
@@ -350,7 +351,9 @@
                         </RegistryKey>
                     </RegistryKey>
                 </Component>
-                <Files Include="*.dll"/>
+                <Files Include="*.dll">
+                    <Exclude Files="wslsettings.dll" />
+                </Files>
                 <Files Include="*.exe">
                     <Exclude Files="wslsettings.exe" />
                 </Files>
